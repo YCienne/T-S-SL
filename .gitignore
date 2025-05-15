@@ -2,3 +2,4 @@ txsp_sl/
 .ipynb_checkpoints/
 _pycache_/
 app/_pycache_/
+node_modules/
