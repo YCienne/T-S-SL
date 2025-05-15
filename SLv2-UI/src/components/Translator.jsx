@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FiMenu, FiUpload } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -13,7 +14,21 @@ const Translation = () => {
     const wsRef = useRef(null);
     const navigate = useNavigate();
 
-    const languages = ["English", "Spanish", "French", "Korean", "Italian", "Russian", "German", "Japanese", "Arabic", "Chinese"];
+    const languages = [
+        {value: "en", text: "English"},
+        {value: "es", text: "Spanish"},
+        {value: "fr", text: "French"},
+        {value: "ko", text: "Korean"},
+        {value: "it", text: "Italian"},
+        {value: "ru", text: "Russian"},    
+        {value: "de", text: "German"},
+        {value: "ja", text: "Japanese"},
+        {value: "ar", text: "Arabic"},
+        {value: "zh", text: "Chinese"},
+    ];
+
+    const { t } = useTranslation();
+    const [lang, setLang ] = useState("en");
 
     useEffect(() => {
         return () => stopTranslation(); 
@@ -198,8 +213,10 @@ const Translation = () => {
             
 
         const handleLanguageChange = (e) => {
-            const language = e.target.value;
+            const language=setLang(e.target.value);
+            // const language = e.target.value;
             setSelectedLanguage(language);
+            i18next.changeLanguage(language);
 
             if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
                 const message = JSON.stringify({language});
@@ -337,9 +354,11 @@ const Translation = () => {
 
             const data = await response.json();
             const labels = data.map(d => d.translation);
-            setTranslations(labels);
 
-            labels.forEach(label => speak(label));
+            const translatedLabels = labels.map((label) => t(label))
+            setTranslations(translatedLabels);
+
+            translatedLabels.forEach(label => speak(label));
             } catch (error) {
             console.error("Translation error:", error);
             }
@@ -377,7 +396,7 @@ const Translation = () => {
 
         if (captureInterval) {
             clearInterval(captureInterval);
-            captureInterval = null; 
+            // captureInterval = null; 
         }
 
         const canvas = document.querySelector("canvas");
@@ -401,12 +420,12 @@ const Translation = () => {
                 <div className="flex items-center">
                     <FiMenu className="text-xl mr-2" />
                     <select onChange={handleLanguageChange} className="bg-gray-800 p-2 rounded">
-                        {languages.map((lang) => (
-                            <option key={lang} value={lang}>{lang}</option>
+                        {languages.map((item) => (
+                            <option key={item.value} value={item.value}>{item.text}</option>
                         ))}
                     </select>
                 </div>
-                <p className="mt-10">Translations</p> 
+                <p className="mt-10">{t("Translations")}</p> 
                 <div className="flex flex-1 flex-col mt-5">
                     <ul className='flex flex-row gap-2'>
                         {translations.length > 0 ? (
@@ -414,7 +433,7 @@ const Translation = () => {
                             .slice(-5)
                             .map((translation, index) => <li key={index}>{translation}</li>)
                         ) : (
-                                <p>No translations yet</p>
+                                <p>{t("No translations yet")}</p>
                         )}
                     </ul>
                 </div>
@@ -448,29 +467,29 @@ const Translation = () => {
                 <div className="absolute bottom-4 flex space-x-4">
                     {!cameraActive && !uploadFile && (
                         <button onClick={startCamera } className="text-lg font-bold py-2 px-4 bg-gray-900 text-white rounded-full">
-                            Start Camera
+                            {t("Start Camera")} 
                         </button>
                     )}
                     
                     {cameraActive && (
                         <button onClick={stopCamera} className="text-lg font-bold py-2 px-4 bg-gray-900 text-white rounded-full">
-                            Stop Camera
+                            {t("Stop Camera")} 
                         </button>
                     )}
                     {uploadFile && uploadFile.type.startsWith("image") && (
                         <button onClick={handleTranslation} className="text-lg font-bold py-2 px-4 bg-gray-900 text-white rounded-full">
-                            Translate
+                            {t("Translate")} 
                         </button>
                     )}
                     <button onClick={clearFeed} className="text-lg font-bold py-2 px-4 bg-gray-900 text-white rounded-full">
-                        Clear Feed Box
+                        {t("Clear Feed")} 
                     </button>
                 </div>
                 <button onClick={goHome} className="absolute top-4 left-4 text-lg font-bold py-2 px-4 bg-gray-900 text-white rounded-full">
-                    Home
+                    {t("Home")} 
                 </button>
                 <label htmlFor="file-upload" className="absolute flex gap-2 w-auto ml-auto top-6 cursor-pointer sm:left-36">
-                    <FiUpload className="text-3xl text-white" /> Upload Media
+                    <FiUpload className="text-3xl text-white" /> {t("Upload")} 
                 </label>
                 <input
                     id="file-upload"

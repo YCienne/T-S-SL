@@ -1,7 +1,7 @@
 
 import browserLang from 'browser-lang';
 import { useEffect, useState } from 'react';
-import { FormattedMessage, IntlProvider } from 'react-intl';
+
 
 const supportedLanguages = ["en","it","ko","fr","ja","es","ru","ar","zh","de"];
 
@@ -23,15 +23,5 @@ export default function App() {
         setMessages(data);
       });
   }, [locale]);
-
-  return (
-    <IntlProvider locale={locale} messages={messages}>
-      <div className="App">
-        <p>
-          <FormattedMessage id="welcome_msg" />
-        </p>
-      </div>
-    </IntlProvider>
-  );
 }
       
