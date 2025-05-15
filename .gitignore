@@ -3,3 +3,4 @@ txsp_sl/
 _pycache_/
 app/_pycache_/
 node_modules/
+*.pyc
