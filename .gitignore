@@ -4,3 +4,5 @@ _pycache_/
 app/_pycache_/
 node_modules/
 *.pyc
+google-credentials.json
+

@@ -216,7 +216,8 @@ const Translation = () => {
             const language=setLang(e.target.value);
             // const language = e.target.value;
             setSelectedLanguage(language);
-            i18next.changeLanguage(language);
+            
+            
 
             if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
                 const message = JSON.stringify({language});

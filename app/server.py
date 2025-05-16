@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 import base64
 import os
+from translate_utils import translate_text
 
 
 
@@ -61,7 +62,7 @@ async def predict(file: UploadFile = File(...), language: str = 'English'):
             conf = pred.conf[0]
             cls = pred.cls[0]
             label = model.names[int(cls)]
-            translated_text = translate_label(label, language)
+            translated_text = translate_text(label, language)
             detection = {
                 "label": f"{label}",  
                 "confidence": float(conf),
@@ -70,7 +71,7 @@ async def predict(file: UploadFile = File(...), language: str = 'English'):
             }
             detections.append(detection)
         
-        return detections
+        return {detections, language}
 
     except Exception as e:
         return {"error": str(e)}
