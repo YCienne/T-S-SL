@@ -1,5 +1,6 @@
 fastapi
-pydantic
-ultralytics
+uvicorn
+pillow
 numpy
-uvicorn[standard]
+ultralytics
+python-multipart

@@ -37,15 +37,6 @@ class DetectionResponse(BaseModel):
 async def root():
     return {"message": "Welcome to the Sign Language Detection API!"}
 
-def translate_label(label, language):
-    translations = {
-        "Spanish": "Traducción en español",
-        "French": "Traduction en français",
-        "Korean": "한국어 번역",
-        
-    }
-    return translations.get(language, label)
-
 @app.post("/predict", response_model=list[DetectionResponse])
 async def predict(file: UploadFile = File(...), language: str = 'English'):
     try:
@@ -121,4 +112,3 @@ async def websocket_predict(websocket: WebSocket):
         print(f"WebSocket error: {e}")
     finally:
         await websocket.close()
-
