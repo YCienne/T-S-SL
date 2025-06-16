@@ -40,11 +40,9 @@ async def root():
 @app.post("/predict", response_model=list[DetectionResponse])
 async def predict(file: UploadFile = File(...), language: str = 'English'):
     try:
-        # Read and open the image
         image_bytes = await file.read()
         image = Image.open(io.BytesIO(image_bytes))
         
-        # Run inference with the YOLO model
         results = model(image)
         
         detections = []
